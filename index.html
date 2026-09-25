@@ -254,7 +254,7 @@ footer{max-width:960px;margin:0 auto;padding-inline:16px;padding-block:18px 36px
       <div class="top"><svg class="i"><use href="#i-shield"/></svg>Reliability</div>
       <span class="pill">Bar cleared</span>
       <div class="big">1–6</div>
-      <p><span class="unit" style="color:var(--ink)">of 290 answers missed</span> by the Jev-like classifiers, against 11 for the LLM. Every system stayed beneath the threshold for keeping irrelevant sections, which cost reading time.</p>
+      <p><span class="unit" style="color:var(--ink)">of 290 answers missed</span> by the Jev-like classifiers, against 11 for the LLM. All of them stayed beneath the threshold for keeping irrelevant sections, which cost reading time.</p>
     </div>
     <div class="verdict amber">
       <div class="top"><svg class="i"><use href="#i-timer"/></svg>Latency</div>
@@ -312,6 +312,7 @@ footer{max-width:960px;margin:0 auto;padding-inline:16px;padding-block:18px 36px
           <tr><th>Documents</th><td>Two technical documents in specialised domain language: 170 and 47 sections, about 15,000 words.</td></tr>
           <tr><th>Questions</th><td>38, written by a domain expert, from look-ups to reasoning, lists and “does not apply” questions.</td></tr>
           <tr><th>Jev-like classifiers</th><td><span class="pill cyan">paid API</span><b>Jev</b> (typesafe.ai)<br><span class="pill purple" style="margin-top:8px">free demo</span><b>simple-jev Qwen3.8-27B</b> and <b>simple-jev Gemma-4-26B-A4B</b> (Featherless.ai)<br><span class="small">They take a text plus multiple-choice questions, and return one label per question.</span></td></tr>
+          <tr><th>Local encoder classifier</th><td><span class="pill green">local GPU</span><b>Laya</b> (convaiinnovations, Hugging Face): English 0.42B and multilingual 0.32B, run on an 8 GB laptop GPU.<br><span class="small">It gets the same request as Jev. It does not generate text: one pass scores every label.</span></td></tr>
           <tr><th>LLM</th><td><span class="pill amber">free tier</span><b>Gemma 4 31B</b> (Google). It answers in free text, which we parse.</td></tr>
           <tr><th>Questions per request</th><td>38 or 10 (<span class="mono">k38</span>, <span class="mono">k10</span>)</td></tr>
           <tr><th>Reference labels</th><td>A Gemini 3.5 flash-lite judge, corrected by three rounds of blind review by Claude Opus 5.5.</td></tr>
@@ -367,7 +368,7 @@ footer{max-width:960px;margin:0 auto;padding-inline:16px;padding-block:18px 36px
         <span><i style="background:var(--muted)"></i>filled: k10</span>
         <span><i style="border:2px solid var(--muted)"></i>hollow: k38</span>
       </div>
-      <figcaption><b>Every system stayed under the noise limit.</b> The Jev-like classifiers missed 1–6 answers; the LLM kept the least noise but missed the most (11). Noise here is before correction.</figcaption>
+      <figcaption><b>Every system except Laya stayed under the noise limit.</b> Laya, at 77–100% noise, is off the chart. The Jev-like classifiers missed 1–6 answers; the LLM kept the least noise but missed the most (11). Noise here is before correction.</figcaption>
     </figure>
 
     <div class="tbl">
@@ -381,6 +382,8 @@ footer{max-width:960px;margin:0 auto;padding-inline:16px;padding-block:18px 36px
           <tr class="grp"><td><span class="sys"><i class="dot sj"></i>simple-jev Gemma-4-26B-A4B</span></td><td class="n">38</td><td class="n">6</td><td class="n">10.9%</td><td class="n">4.8%</td><td class="n">35.4</td><td class="n free">(48.3)</td><td class="n free">(free demo)</td></tr>
           <tr><td><span class="sys"><i class="dot sj"></i>simple-jev Gemma-4-26B-A4B</span></td><td class="n">10</td><td class="n">6</td><td class="n">11.4%</td><td class="n">5.6%</td><td class="n">36.3</td><td class="n free">(172.3)</td><td class="n free">(free demo)</td></tr>
           <tr class="grp"><td><span class="sys"><i class="dot llm"></i>Gemma 4 31B (LLM)</span></td><td class="n">38</td><td class="n">11</td><td class="n">8.1%</td><td class="n">3.8%</td><td class="n">29.2</td><td class="n free">(816)</td><td class="n"><span class="free">(free tier)</span><br>est. $0.06–0.44</td></tr>
+          <tr class="grp"><td><span class="sys"><i class="dot slm"></i>Laya, English</span></td><td class="n">38</td><td class="n">0</td><td class="n over">100%</td><td class="n">–</td><td class="n over">217.0</td><td class="n">4.2</td><td class="n">local GPU</td></tr>
+          <tr><td><span class="sys"><i class="dot slm"></i>Laya, multilingual</span></td><td class="n">38</td><td class="n over">28</td><td class="n over">77%</td><td class="n">–</td><td class="n">168.2</td><td class="n">4.5</td><td class="n">local GPU</td></tr>
         </tbody>
       </table>
     </div>
@@ -390,6 +393,7 @@ footer{max-width:960px;margin:0 auto;padding-inline:16px;padding-block:18px 36px
       <li><b>Noise</b> The share of kept sections that are irrelevant. The limit is 25%.</li>
       <li><b>Noise, corr.</b> Blind review found that 28% of sampled noise was relevant after all; this column removes that share.</li>
       <li><b>Kept/q</b> Sections kept per question, out of 217.</li>
+      <li><b>Laya</b> Deterministic, so one run each. At k10 its results are the same. The corrected noise column needs a blind review that Laya did not get.</li>
       <li><b>Time/q</b> Summed request latency ÷ 38 questions. <span class="warn">Parentheses mark free services, whose times include queueing.</span></li>
       <li><b>Cost</b> Jev's is measured from its API's token counts. Gemma 4 31B has no paid Google price, so its cost is estimated from its tokens at third-party hosts' prices.</li>
     </ul>
@@ -410,11 +414,12 @@ footer{max-width:960px;margin:0 auto;padding-inline:16px;padding-block:18px 36px
           <tr class="grp"><td><span class="sys"><i class="dot slm"></i>qwen3.5 (k10, 3 seeds)</span></td><td>9.7B, 4-bit Q4_K_M</td><td class="n over">8.3</td><td class="n">2%</td></tr>
           <tr><td><span class="sys"><i class="dot slm"></i>granite4.2-8b</span></td><td>8.8B, 4-bit Q4_K_M</td><td class="n"><span class="over">7</span> <span class="small">(18 unanswered)</span></td><td class="n">19%</td></tr>
           <tr><td><span class="sys"><i class="dot slm"></i>phi4-mini (k10)</span></td><td>3.8B, 4-bit Q4_K_M</td><td class="n">0</td><td class="n over">73%</td></tr>
+          <tr><td><span class="sys"><i class="dot slm"></i>Laya, English / multilingual</span></td><td>0.42B / 0.32B, encoder</td><td class="n">0 / 1</td><td class="n over">100% / 84%</td></tr>
         </tbody>
       </table>
     </div>
     <div class="pilot-note">
-      <div class="go"><b><svg class="i"><use href="#i-checkc"/></svg>Went on to the full set</b><p>The 26–31B systems: Jev, both simple-jev models and Gemma 4 31B.</p></div>
+      <div class="go"><b><svg class="i"><use href="#i-checkc"/></svg>Went on to the full set</b><p>The 26–31B systems: Jev, both simple-jev models and Gemma 4 31B. Laya also ran the full set, on request, although it failed the pilot.</p></div>
       <div class="stop"><b><svg class="i"><use href="#i-x"/></svg>Stopped after the pilot</b><p>The SLMs. Each either missed many answers or kept almost everything.</p></div>
     </div>
   </section>
@@ -424,12 +429,13 @@ footer{max-width:960px;margin:0 auto;padding-inline:16px;padding-block:18px 36px
     <h2><svg class="i"><use href="#i-scale"/></svg>Findings</h2>
     <p class="sub">Ranked by how directly they answer the core question.</p>
     <ol class="findings">
-      <li><div><h3>Jev-like classifiers were as reliable as the LLM, or more so.</h3><p>They missed 1–6 of 290 answers, against the LLM's 11, and every system stayed under the noise limit.</p></div></li>
-      <li><div><h3>Jev is the fastest, but keeps the most.</h3><p>It took 19–26 s per question, against 32–816 s for the others. It kept 61 sections per question, against 29–46.</p></div></li>
+      <li><div><h3>Jev-like classifiers were as reliable as the LLM, or more so.</h3><p>They missed 1–6 of 290 answers, against the LLM's 11, and all of them stayed under the noise limit.</p></div></li>
+      <li><div><h3>Jev is the fastest system that cleared the bar, but keeps the most.</h3><p>It took 19–26 s per question, against 32–816 s for the other systems that passed. It kept 61 sections per question, against 29–46.</p></div></li>
       <li><div><h3>Jev is not clearly cheaper than a hosted LLM.</h3><p>Its cost is $0.07–0.08 per run (measured), against $0.06–0.44 for Gemma 4 31B (estimated). Its selling point is speed.</p></div></li>
       <li><div><h3>Request size does not change Jev, but it does change simple-jev Qwen.</h3><p>Qwen missed 1 at k10 and 5 at k38, and went over the noise limit at k1.</p></div></li>
       <li><div><h3>Low noise came with more misses.</h3><p>The LLM and the Gemma classifier kept the least noise, but missed the most answers (6–11).</p></div></li>
       <li><div><h3>SLMs under 8 GB were no match for 26–31B systems.</h3><p>They were generally not accurate enough.</p></div></li>
+      <li><div><h3>The Laya encoder classifier cannot do this task out of the box.</h3><p>It is fast (about 4 s per question on a laptop GPU), but it kept 168–217 of 217 sections per question. Its scores ranked answering sections no better than chance, so no cut-off would fix it.</p></div></li>
     </ol>
   </section>
 
