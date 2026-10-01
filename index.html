@@ -90,8 +90,8 @@ svg .t-mono{font-family:"Geist Mono",ui-monospace,monospace}
 
 <div class="tldr">
   <div class="k">TL;DR</div>
-  <p>Jev and simple-jev missed <b>1–6 of the 290</b> sections that answer a question, against <b>11</b> for a 31B LLM. Of the sections they put in front of the reader, <b>11–23% were irrelevant</b>, sections that should have been graded unrelated. We call this noise, and set the limit at 25%: about one irrelevant section in four. Jev graded a question in <b>19–26 s</b>, at <b>$0.07–0.08</b> for a full run of 38 questions.</p>
-  <p>Liquid AI's D1 missed as few answers (3–4), but almost a third of what it kept was irrelevant (29–30%). Laya, run zero-shot, kept nearly every section. Jev is not clearly cheaper than the LLM we compared it with, Gemma 4 31B. Google has no paid price for that model, so we estimated its cost from its token counts at third-party hosts' prices: <b>$0.06–0.44</b> per run. Speed is Jev's selling point, and accuracy was the bar it had to clear.</p>
+  <p>Jev and simple-jev missed <b>1–6 of the 290</b> sections that answer a question, against <b>11</b> for a 31B LLM. Of the irrelevant sections, sections that should have been graded unrelated, they still <b>kept 11–23%</b>. We call this share noise, and set the limit at 25%: at most one irrelevant section in four may get through. Jev graded a question in <b>19–26 s</b>, at <b>$0.07–0.08</b> for a full run of 38 questions.</p>
+  <p>Liquid AI's D1 missed as few answers (3–4), but it kept almost a third of the irrelevant sections (29–30%). Laya, run zero-shot, kept nearly every section. Jev is not clearly cheaper than the LLM we compared it with, Gemma 4 31B. Google has no paid price for that model, so we estimated its cost from its token counts at third-party hosts' prices: <b>$0.06–0.44</b> per run. Speed is Jev's selling point, and accuracy was the bar it had to clear.</p>
 </div>
 
 <h2>How section grading works</h2>
@@ -148,7 +148,7 @@ svg .t-mono{font-family:"Geist Mono",ui-monospace,monospace}
 <p>Not every error costs the same. A dropped answer can mean a failed design, whereas a kept irrelevant section costs only reading time. We therefore score two errors separately:</p>
 <ul>
   <li><b>Missed answers</b>: a <span class="grade">direct</span> pair graded <span class="grade">unrelated</span> or left unanswered, out of 290. This is the error that matters. A direct answer graded tangential is still shown, so it does not count as a miss.</li>
-  <li><b>Noise</b>: the share of kept sections that are <span class="grade">unrelated</span>. We set the limit at <b>25%</b>; above about one irrelevant section in four, filtering costs more reading time than it saves. The limit is our judgement.</li>
+  <li><b>Noise</b>: the share of <span class="grade">unrelated</span> sections that a system kept anyway. We set the limit at <b>25%</b>; if more than about one irrelevant section in four gets through, filtering costs more reading time than it saves. The limit is our judgement.</li>
   <li><b>Kept per question</b> (out of 217) and <b>time per question</b>: summed request latency divided by 38.</li>
 </ul>
 
@@ -182,7 +182,7 @@ svg .t-mono{font-family:"Geist Mono",ui-monospace,monospace}
 </figure>
 
 <h3>Screening pilot</h3>
-<p>Before the full runs, we screened both LLM and System One models on 480 pairs (10 questions × 48 sections). Three small, local language models that fit an 8 GB laptop GPU (qwen3.5 9.7B, granite4.2-8b, phi4-mini) each either missed many answers (7–8 of 26) or kept almost everything (73% noise for phi4-mini). Given their poor accuracy and high noise, they were no longer considered for the full run. The 26B to 31B LLM models went on to the full set. All System One models, like Jev, simple-jev, D1 and Laya, ran the full set as well, although Laya failed the pilot and D1 was just over the noise limit.</p>
+<p>Before the full runs, we screened local SLMs, LLMs and System One models on 480 pairs (10 questions × 48 sections). Three small, local language models that fit an 8 GB laptop GPU (qwen3.5 9.7B, granite4.2-8b, phi4-mini) each either missed many answers (7–8 of 26) or kept almost everything (73% noise for phi4-mini). Given their poor accuracy and high noise, they were no longer considered for the full run. The LLM, Gemma 4 31B, went on to the full set. All System One models, Jev, simple-jev (on Qwen3.8-27B and Gemma-4-26B), D1 and Laya, ran the full set as well, although Laya failed the pilot and D1 was just over the noise limit.</p>
 
 <h2>Results</h2>
 <p>We did one offline run per system on the full 8,246 pairs. D1 is not deterministic (about one label in nine changes between runs), so its figures are the mean of three runs. Figure 3 plots the two errors against each other.</p>
@@ -202,7 +202,7 @@ svg .t-mono{font-family:"Geist Mono",ui-monospace,monospace}
   <g font-size="11.5" class="s-mut t-mono" text-anchor="end">
     <text x="50" y="294">0</text><text x="50" y="250.7">2</text><text x="50" y="207.3">4</text><text x="50" y="164">6</text><text x="50" y="120.7">8</text><text x="50" y="77.3">10</text><text x="50" y="34">12</text>
   </g>
-  <text x="350" y="332" text-anchor="middle" font-size="12.5" class="s-ink2">Noise: share of kept sections that are irrelevant</text>
+  <text x="350" y="332" text-anchor="middle" font-size="12.5" class="s-ink2">Noise: share of irrelevant sections kept</text>
   <text x="14" y="160" text-anchor="middle" font-size="12.5" class="s-ink2" transform="rotate(-90 14 160)">Missed answers (of 290)</text>
   <!-- LLM -->
   <circle cx="194.2" cy="51.7" r="5.5" class="s-bg st-ink" stroke-width="1.8"/>
