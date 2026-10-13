@@ -361,6 +361,19 @@ svg .t-mono{font-family:"Geist Mono",ui-monospace,monospace}
 </ul>
 <p>On cost, Jev is not clearly cheaper than <b>Gemma 4 31B</b>: $0.07–0.08 per run against $0.06–0.44, estimated from Gemma's token counts at third-party hosts' prices. At list price, <b>clef-flash</b> would cost about what Jev does, and <b>clef</b> about six times as much.</p>
 
+<p><b>Without a discrete GPU.</b> We also ran d3-flash on a laptop with no discrete GPU (Intel Core Ultra 7 155H, built-in Arc graphics), on the pilot only (k = 10), with three of llama.cpp's backends for Intel graphics. The labels matched the RTX 4060's almost exactly (470–479 of 480), so quality held, but every question took 100–200 s instead of 15–37 s. At that pace a full run would take about 9 minutes per question (estimated from the 4060's pilot-to-full ratio), which is too slow for interactive use (Table 4).</p>
+<div class="tw"><table>
+<thead><tr><th>Hardware, backend</th><th>Quant</th><th class="n">Missed /33</th><th class="n">Soft /18</th><th class="n">Noise</th><th class="n">Kept /q</th><th class="n">Time /q</th><th class="n">Labels = 4060</th></tr></thead>
+<tbody>
+<tr><td>RTX 4060 Laptop, CUDA</td><td>4-bit</td><td class="n">0</td><td class="n">2</td><td class="n">9.3%</td><td class="n">8.9</td><td class="n">15 s</td><td class="n">–</td></tr>
+<tr><td>RTX 4060 Laptop, CUDA</td><td>8-bit</td><td class="n">0</td><td class="n">2</td><td class="n">7.0%</td><td class="n">7.9</td><td class="n">37 s</td><td class="n">–</td></tr>
+<tr><td>Arc iGPU, OpenVINO</td><td>4-bit</td><td class="n">0</td><td class="n">3</td><td class="n">9.6%</td><td class="n">8.9</td><td class="n">100 s</td><td class="n">470/480</td></tr>
+<tr><td>Arc iGPU, OpenVINO</td><td>8-bit</td><td class="n">0</td><td class="n">2</td><td class="n">6.8%</td><td class="n">7.8</td><td class="n">117 s</td><td class="n">479/480</td></tr>
+<tr><td>Arc iGPU, Vulkan</td><td>4-bit</td><td class="n">0</td><td class="n">2</td><td class="n">9.8%</td><td class="n">9.1</td><td class="n">198 s</td><td class="n">478/480</td></tr>
+<tr><td>Arc iGPU, SYCL</td><td>4-bit</td><td class="n">0</td><td class="n">2</td><td class="n">10.3%</td><td class="n">9.3</td><td class="n">202 s</td><td class="n">475/480</td></tr>
+</tbody></table></div>
+<p class="tcap"><b>Table 4.</b> d3-flash on the pilot (k = 10), on an 8 GB laptop GPU and on an Intel laptop's built-in graphics. <i>Labels = 4060</i>: labels identical to the RTX 4060 run at the same quantisation. 8-bit on Vulkan crashed (the iGPU dropped out after 17 minutes) and 8-bit on SYCL was stopped part-way; the CPU-only run was not repeated after a failed launch.</p>
+
 <h2>A thinking model against a non-thinking one</h2>
 <p>Fastino offers two decision models. It describes GLiDE as a “thinking decision model”; GLiNER-2.5-Decide is a small encoder classifier, like Laya. The pair let us test what thinking buys on this task.</p>
 <p><b>GLiDE comes close to Jev.</b> It missed 1 answer at k38 and at k10, the fewest of any system, but kept 36–39% of the irrelevant sections, over the limit. Its scores rank answering sections slightly worse than Jev's (AUC 0.97 against 0.98). It is not deterministic: on a repeat of the pilot, 15 of 480 labels changed.</p>
