@@ -1,5 +1,5 @@
 # Can a fast classifier find the relevant sections of technical documents as reliably as a large language model?
 
-Short research report (25 September 2026, updated 11 October 2026) comparing Jev (typesafe.ai), simple-jev, Liquid AI D1, Fastino GLiDE and GLiNER-2.5-Decide, Cloudflare clef and clef-flash, Nace.ai Drex 1.5, and Laya classifiers with an LLM (Gemma 4 31B) on grading (question, section) relevance in technical documents.
+Short research report (25 September 2026, updated 13 October 2026) comparing Jev (typesafe.ai), simple-jev, Liquid AI D1, Fastino GLiDE and GLiNER-2.5-Decide, Cloudflare clef and clef-flash, Nace.ai Drex 1.5 and 2.0, SubQ Snap, vLLM-SR Decision 3.0 (d3-flash, local), offline D1, and Laya classifiers with an LLM (Gemma 4 31B) on grading (question, section) relevance in technical documents.
 
 Read it at **https://95pctai.github.io/jev-search-eval-report/** (or open `index.html`).
