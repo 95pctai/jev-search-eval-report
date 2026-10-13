@@ -198,7 +198,7 @@ svg .t-mono{font-family:"Geist Mono",ui-monospace,monospace}
 </figure>
 
 <h3>Screening pilot</h3>
-<p>Every system first graded a pilot of 480 pairs (10 questions × 48 sections, 33 answers). The pilot also asked one question of its own: <b>can an SLM small enough for an 8 GB laptop GPU rival the hosted System One models?</b> <b>Not yet.</b> But a locally hosted System One model, d3-flash (9B parameters, in 4-bit, using 7.9 of the GPU's 8 GB), comes close in accuracy, though it was about three times slower than Jev.</p>
+<p>Every system first graded a pilot of 480 pairs (10 questions × 48 sections, 33 answers). The pilot also asked one question of its own: <b>can an SLM small enough for an 8 GB laptop GPU rival the hosted System One models?</b> <b>Not yet.</b> But a locally hosted System One model, d3-flash (9B Q4_K_M, using 7.9 of the GPU's 8 GB), comes close in accuracy, though it was about three times slower than Jev.</p>
 <ul>
   <li><b>Local, dropped after the pilot:</b> qwen3.5 9.7B, granite4.2-8b and phi4-mini each missed 6–10 of the 33 answers or kept almost everything (phi4-mini, 72% noise).</li>
   <li><b>Local, run on the full set:</b> d3-flash in 4-bit missed none at 9% noise; offline D1 in 8-bit missed 1 at 72%.</li>
